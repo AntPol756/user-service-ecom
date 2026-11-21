@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 .env
 .idea/
+.postman/
+postman/
+app/.postman/
+app/postman/
