@@ -1,0 +1,71 @@
+# Runs the whole Poll System: both services + one MySQL database per service.
+# Clone both repositories next to each other:
+#   some-folder/
+#     user-service-ecom/
+#     poll-service-ecom/
+# then run from either folder:  docker compose up --build
+
+services:
+  user-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: user_service_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - user_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  poll-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: poll_service_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - poll_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  user-service:
+    build: ../user-service-ecom
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: user-db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: user_service_db
+      POLL_SERVICE_URL: http://poll-service:8001
+    depends_on:
+      user-db:
+        condition: service_healthy
+
+  poll-service:
+    build: ../poll-service-ecom
+    ports:
+      - "8001:8001"
+    environment:
+      DB_HOST: poll-db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: poll_service_db
+      USER_SERVICE_URL: http://user-service:8000
+    depends_on:
+      poll-db:
+        condition: service_healthy
+
+volumes:
+  user_db_data:
+  poll_db_data:

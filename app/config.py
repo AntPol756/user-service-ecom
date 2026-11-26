@@ -13,11 +13,15 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
-    def database_url(self) -> str:
+    def server_url(self) -> str:
         return (
             f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}"
-            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            f"@{self.DB_HOST}:{self.DB_PORT}"
         )
+
+    @property
+    def database_url(self) -> str:
+        return f"{self.server_url}/{self.DB_NAME}"
 
 
 settings = Settings()

@@ -9,6 +9,8 @@ class UserCreate(BaseModel):
     email: EmailStr
     age: int = Field(..., ge=0, le=130)
     address: str = Field(..., min_length=1, max_length=255)
+    # the date the user joined the company as a customer (defaults to now)
+    joining_date: Optional[datetime] = None
 
 
 class UserUpdate(BaseModel):
@@ -17,6 +19,7 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     age: Optional[int] = Field(None, ge=0, le=130)
     address: Optional[str] = Field(None, min_length=1, max_length=255)
+    joining_date: Optional[datetime] = None
 
 
 class UserResponse(BaseModel):

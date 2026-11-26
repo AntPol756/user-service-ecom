@@ -1,3 +1,5 @@
+from typing import List
+
 import requests
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
@@ -20,6 +22,9 @@ class UserService:
                 detail="User with this email already exists",
             )
         return self.repository.create(user_data)
+
+    def get_all_users(self) -> List[User]:
+        return self.repository.get_all()
 
     def get_user(self, user_id: int) -> User:
         user = self.repository.get_by_id(user_id)

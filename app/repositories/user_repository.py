@@ -1,4 +1,5 @@
-from typing import Optional
+from datetime import datetime, timezone
+from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.models import User
@@ -12,6 +13,9 @@ class UserRepository:
     def get_by_id(self, user_id: int) -> Optional[User]:
         return self.db.query(User).filter(User.id == user_id).first()
 
+    def get_all(self) -> List[User]:
+        return self.db.query(User).order_by(User.id).all()
+
     def get_by_email(self, email: str) -> Optional[User]:
         return self.db.query(User).filter(User.email == email).first()
 
@@ -22,6 +26,7 @@ class UserRepository:
             email=user_data.email,
             age=user_data.age,
             address=user_data.address,
+            joining_date=user_data.joining_date or datetime.now(timezone.utc),
             is_registered=False,
         )
         self.db.add(db_user)
