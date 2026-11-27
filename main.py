@@ -1,7 +1,5 @@
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
-
 from app.config import settings
 from app.controllers.user_controller import router as user_router
 from app.database import init_db

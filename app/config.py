@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 class Settings(BaseSettings):
     APP_NAME: str = "User Service"
     DB_HOST: str = "localhost"

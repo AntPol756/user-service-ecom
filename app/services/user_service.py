@@ -1,14 +1,11 @@
 from typing import List
-
 import requests
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-
 from app.config import settings
 from app.models import User
 from app.repositories.user_repository import UserRepository
 from app.schemas import UserCreate, UserUpdate
-
 
 class UserService:
     def __init__(self, db: Session):
@@ -53,7 +50,7 @@ class UserService:
     def delete_user(self, user_id: int) -> None:
         user = self.get_user(user_id)
 
-        # מחיקת תשובות המשתמש ב-Poll Service דרך API
+
         try:
             response = requests.delete(
                 f"{settings.POLL_SERVICE_URL}/answers/user/{user_id}",

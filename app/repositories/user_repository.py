@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 from typing import List, Optional
 from sqlalchemy.orm import Session
-
 from app.models import User
 from app.schemas import UserCreate, UserUpdate
 

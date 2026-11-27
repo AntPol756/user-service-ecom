@@ -9,7 +9,6 @@ class UserCreate(BaseModel):
     email: EmailStr
     age: int = Field(..., ge=0, le=130)
     address: str = Field(..., min_length=1, max_length=255)
-    # the date the user joined the company as a customer (defaults to now)
     joining_date: Optional[datetime] = None
 
 
